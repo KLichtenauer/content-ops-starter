@@ -177,8 +177,21 @@ function CarouselWithPagination({ items = [], hasTopMargin, hasSectionTitle, has
     const [activeDot, setActiveDot] = React.useState(0);
 
     return (
-        <div className={classNames('w-full', { 'mt-12': hasTopMargin })} {...(hasAnnotations && { 'data-sb-field-path': '.items' })}>
-            <Swiper effect={'fade'} fadeEffect={{ crossFade: true }} speed={500} autoHeight={true} modules={[EffectFade]} onSwiper={setSwiperRef}>
+        <div className={classNames('w-full', 'pb-10', { 'mt-12': hasTopMargin })} {...(hasAnnotations && { 'data-sb-field-path': '.items' })}>
+            <Swiper
+                spaceBetween={16}
+                slidesPerView={1.16}
+                centeredSlides={true}
+                loop={true}
+                speed={500}
+                autoHeight={true}
+                breakpoints={{
+                    640: { slidesPerView: 1.28, spaceBetween: 20 },
+                    1024: { slidesPerView: 1.42, spaceBetween: 24 }
+                }}
+                onSwiper={setSwiperRef}
+                onSlideChange={(swiper) => setActiveDot(swiper.realIndex)}
+            >
                 {items.map((item, index) => (
                     <SwiperSlide key={index}>
                         <div className="w-full max-w-5xl mx-auto">
@@ -193,7 +206,7 @@ function CarouselWithPagination({ items = [], hasTopMargin, hasSectionTitle, has
                         key={index}
                         className={classNames('sb-carousel-dot', activeDot === index ? 'sb-carousel-dot-active' : undefined)}
                         onClick={() => {
-                            swiperRef?.slideTo(index);
+                            swiperRef?.slideToLoop(index);
                             setActiveDot(index);
                         }}
                     />
